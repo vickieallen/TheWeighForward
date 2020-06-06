@@ -1,0 +1,9 @@
+<div style="display: block;" *ngIf="usedDailyPoints > 0">
+  <canvas
+    baseChart
+    [data]="doughnutChartData"
+    [labels]="doughnutChartLabels"
+    [chartType]="doughnutChartType"
+  >
+  </canvas>
+</div>
