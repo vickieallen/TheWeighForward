@@ -1,0 +1,31 @@
+<ion-header [translucent]="true">
+  <ion-toolbar>
+    <ion-row>
+      <ion-col size="10">
+        <ion-title class="ion-margin-vertical">
+          Add food log entry
+        </ion-title>
+      </ion-col>
+      <ion-col size="2">
+        <div (click)="dismiss()" class="ion-margin-vertical"><i class="fa fa-times"></i></div>
+      </ion-col>
+      </ion-row>
+  </ion-toolbar>
+</ion-header>
+<ion-content [fullscreen]="true">
+  <form [formGroup]="foodLogForm" (ngSubmit)="onSubmit()">
+    <ion-item>
+      <ion-label position="floating">What did you eat?</ion-label>
+      <ion-input formControlName="description"></ion-input>
+    </ion-item>
+   
+    <ion-item>
+      <ion-label position="floating">How many {{currentUser?.synName}}?</ion-label>
+      <ion-input type="number" formControlName="numberOfSyns"></ion-input>
+    </ion-item>
+   
+    <ion-button expand="block" type="submit">Add</ion-button>
+
+  
+  </form>
+</ion-content>
