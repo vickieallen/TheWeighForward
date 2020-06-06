@@ -11,14 +11,19 @@ export class DailyUsageGraphComponent implements OnInit {
 
   @Input() totalDailyPoints: number;
   @Input() usedDailyPoints: number;
+  @Input() pointName: string;
   // Doughnut
-  public doughnutChartLabels: Label[] = ['Used points', 'Total points'];
+  public doughnutChartLabels: Label[];
   public doughnutChartData: MultiDataSet;
   public doughnutChartType: ChartType = 'doughnut';
 
   ngOnInit() {
     console.log(this.usedDailyPoints);
     console.log(this.totalDailyPoints);
+    this.doughnutChartLabels = [
+      `Used ${this.pointName}`,
+      `Total ${this.pointName}`,
+    ];
     this.doughnutChartData = [[this.usedDailyPoints, 15]];
   }
 }

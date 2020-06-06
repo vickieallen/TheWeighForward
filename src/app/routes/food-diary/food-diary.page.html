@@ -27,8 +27,12 @@
     <app-daily-usage-graph
       [usedDailyPoints]="'6'"
       [totalDailyPoints]="user.numberOfSyns"
+      [pointName]="user.synName"
     ></app-daily-usage-graph>
 
-    <p *ngFor="let u of user.foodLogs">{{u.description}}</p>
+    <ion-card></ion-card>
+    <ion-card-content>
+      <p *ngFor="let u of user.foodLogs">{{u.description}}</p>
+    </ion-card-content>
   </div>
 </ion-content>
