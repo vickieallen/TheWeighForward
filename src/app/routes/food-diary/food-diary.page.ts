@@ -8,26 +8,39 @@ import { AddFoodComponent } from './add-food/add-food.component';
 @Component({
   selector: 'app-food-diary',
   templateUrl: 'food-diary.page.html',
-  styleUrls: ['food-diary.page.scss']
+  styleUrls: ['food-diary.page.scss'],
 })
-export class FoodDiaryPage  {
+export class FoodDiaryPage {
+  constructor(
+    private storageService: StorageService,
+    public modalController: ModalController
+  ) {}
+  user: User;
 
-  constructor(private storageService: StorageService, public modalController: ModalController) {}
- user: User;
-
-
-  ionViewWillEnter(){
+  ionViewWillEnter() {
     from(this.storageService.getObject('user'))
-    .pipe(
-      map(user => { this.user = user;}))
+      .pipe(
+        map((user) => {
+          this.user = user;
+        })
+      )
       .subscribe();
   }
 
-  async addLogItem(){
-const modal = await this.modalController.create({component: AddFoodComponent});
-modal.present();
+  async addLogItem() {
+    const modal = await this.modalController.create({
+      component: AddFoodComponent,
+    });
+
+    modal.onDidDismiss().then((_) => {
+      from(this.storageService.getObject('user'))
+        .pipe(
+          map((user) => {
+            this.user = user;
+          })
+        )
+        .subscribe();
+    });
+    modal.present();
   }
-
- 
-
 }

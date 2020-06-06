@@ -19,7 +19,6 @@ import { StateModule } from './state/state.module';
     IonicModule.forRoot(),
     AppRoutingModule,
     IonicStorageModule.forRoot(),
-    StateModule.forRoot(),
   ],
   providers: [
     StatusBar,
