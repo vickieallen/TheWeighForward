@@ -1,3 +1,15 @@
-<p>
-  weight-graph works!
-</p>
+<div style="display: block;" *ngIf="!!lineChartData">
+  <canvas
+    baseChart
+    width="400"
+    height="400"
+    [datasets]="lineChartData"
+    [labels]="lineChartLabels"
+    [options]="lineChartOptions"
+    [colors]="lineChartColors"
+    [legend]="lineChartLegend"
+    [chartType]="lineChartType"
+    [plugins]="lineChartPlugins"
+  >
+  </canvas>
+</div>
