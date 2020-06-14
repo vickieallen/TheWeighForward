@@ -111,7 +111,7 @@
       <ion-label *ngIf="!!u.stones">
         <p>{{u.stones}}st {{u.lbs}}lbs</p></ion-label
       >
-      <ion-label *ngIf="!!!u.stones"
+      <ion-label *ngIf="!!!u.stones" (click)="openPicker(false, u.createDate)"
         ><p>Add weight log <i class="fa fa-plus"></i></p
       ></ion-label>
     </ion-item>

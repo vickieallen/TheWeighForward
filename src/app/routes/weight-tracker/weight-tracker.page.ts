@@ -39,67 +39,68 @@ export class WeightTrackerPage {
           } else {
             this.latestWeight = { stones: 12, lbs: 7 } as WeightLog;
           }
-          this.weightLogHistory = [];
 
-          if (this.user.weighFrequency == 1) {
-            //daily weigh ins
-            let currentDate = moment().startOf('day').add(-30, 'd');
-
-            while (currentDate <= moment().startOf('day')) {
-              const weightOnThisDay = this.user.weightLogs.find(
-                (e) =>
-                  moment(e.createDate).startOf('day').format() ===
-                  currentDate.format()
-              );
-              if (!!weightOnThisDay) {
-                this.weightLogHistory.push(weightOnThisDay);
-              } else {
-                this.weightLogHistory.push({
-                  createDate: currentDate.toDate(),
-                  stones: null,
-                  lbs: null,
-                });
-              }
-              currentDate = currentDate.add(1, 'd');
-            }
-
-            this.weightLogHistory.reverse();
-          } else if (this.user.weighFrequency == 2) {
-            const weighInDay = moment()
-              .day(moment().day() >= 2 ? 2 : -5)
-              .startOf('day');
-            //weekly weigh ins
-            let currentDate = moment(weighInDay).add(-6, 'week');
-
-            while (currentDate <= weighInDay) {
-              const weightThisWeek = this.user.weightLogs.find(
-                (e) =>
-                  moment(e.createDate)
-                    .day(moment(e.createDate).day() >= 2 ? 2 : -5)
-                    .startOf('day')
-                    .format() === currentDate.format()
-              );
-              if (!!weightThisWeek) {
-                this.weightLogHistory.push({
-                  createDate: currentDate.toDate(),
-                  stones: weightThisWeek.stones,
-                  lbs: weightThisWeek.lbs,
-                });
-              } else {
-                this.weightLogHistory.push({
-                  createDate: currentDate.toDate(),
-                  stones: null,
-                  lbs: null,
-                });
-              }
-              currentDate = currentDate.add(1, 'week');
-            }
-
-            this.weightLogHistory.reverse();
-          }
+          this.getWeightLogHistory();
         })
       )
       .subscribe();
+  }
+
+  getWeightLogHistory() {
+    this.weightLogHistory = [];
+    if (this.user.weighFrequency == 1) {
+      //daily weigh ins
+      let currentDate = moment().startOf('day').add(-30, 'd');
+
+      while (currentDate <= moment().startOf('day')) {
+        const weightOnThisDay = this.user.weightLogs.find(
+          (e) =>
+            moment(e.createDate).startOf('day').format() ===
+            currentDate.format()
+        );
+        if (!!weightOnThisDay) {
+          this.weightLogHistory.push(weightOnThisDay);
+        } else {
+          this.weightLogHistory.push({
+            createDate: currentDate.toDate(),
+            stones: null,
+            lbs: null,
+          });
+        }
+        currentDate = currentDate.add(1, 'd');
+      }
+    } else if (this.user.weighFrequency == 2) {
+      const weighInDay = moment()
+        .day(moment().day() >= 2 ? 2 : -5)
+        .startOf('day');
+      //weekly weigh ins
+      let currentDate = moment(weighInDay).add(-6, 'week');
+
+      while (currentDate <= weighInDay) {
+        const weightThisWeek = this.user.weightLogs.find(
+          (e) =>
+            moment(e.createDate)
+              .day(moment(e.createDate).day() >= 2 ? 2 : -5)
+              .startOf('day')
+              .format() === currentDate.format()
+        );
+        if (!!weightThisWeek) {
+          this.weightLogHistory.push({
+            createDate: currentDate.toDate(),
+            stones: weightThisWeek.stones,
+            lbs: weightThisWeek.lbs,
+          });
+        } else {
+          this.weightLogHistory.push({
+            createDate: currentDate.toDate(),
+            stones: null,
+            lbs: null,
+          });
+        }
+        currentDate = currentDate.add(1, 'week');
+      }
+    }
+    this.weightLogHistory.reverse();
   }
   segmentChanged($event) {
     this.selectedSegment = $event.detail.value;
@@ -107,7 +108,7 @@ export class WeightTrackerPage {
   async editTargetWeight() {
     this.openPicker(true);
   }
-  async openPicker(setTarget: boolean) {
+  async openPicker(setTarget: boolean, date: Date = null) {
     console.log(this.latestWeight);
 
     let selectedWeight = this.latestWeight;
@@ -172,7 +173,7 @@ export class WeightTrackerPage {
           const weightLog = {
             stones: stones.options[stones.selectedIndex].value,
             lbs: lbs.options[lbs.selectedIndex].value,
-            createDate: moment().toDate(),
+            createDate: !!date ? date : moment().toDate(),
           } as WeightLog;
           if (!!this.user && !!!this.user.weightLogs) {
             this.user.weightLogs = [];
@@ -190,6 +191,7 @@ export class WeightTrackerPage {
               this.storageService.getObject('user').then((u) => {
                 this.user = u;
               });
+              this.getWeightLogHistory();
             })
             .catch(async (_) => {
               const toast = await this.toastController.create({
