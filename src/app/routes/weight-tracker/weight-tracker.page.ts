@@ -105,6 +105,31 @@ export class WeightTrackerPage {
   segmentChanged($event) {
     this.selectedSegment = $event.detail.value;
   }
+
+  getWeightChange(weightLog: WeightLog) {
+    const log = this.user.weightLogs.find(
+      (e) => e.createDate === weightLog.createDate
+    );
+    const index = this.user.weightLogs.indexOf(log);
+    const previousIndex = index - 1;
+    const previousLog = this.user.weightLogs[previousIndex];
+
+    if (!!previousLog) {
+      const previousLogLbs = previousLog.stones * 14 + +previousLog.lbs;
+      const currentLogLbs = log.stones * 14 + +log.lbs;
+
+      let change = currentLogLbs - previousLogLbs;
+      if (change < 0) {
+        return `Lost ${(change *= -1)} lb${change > 1 ? 's' : ''}`;
+      } else if (change == 0) {
+        return 'Maintain';
+      } else {
+        return `Gain ${change} lb${change > 1 ? 's' : ''}`;
+      }
+    } else {
+      return '';
+    }
+  }
   async editTargetWeight() {
     this.openPicker(true);
   }
