@@ -8,7 +8,7 @@ import {
   ToastController,
 } from '@ionic/angular';
 import { StorageService } from 'src/app/services/storage.service';
-import { User } from 'src/app/models/user';
+import { User, WeighFrequency } from 'src/app/models/user';
 import { WeightLog } from 'src/app/models/weight-log';
 import * as moment from 'moment';
 
@@ -27,16 +27,75 @@ export class WeightTrackerPage {
   user: User;
   latestWeight: WeightLog;
   selectedSegment = 'week';
+  weightLogHistory: WeightLog[];
   ionViewWillEnter() {
     from(this.storageService.getObject('user'))
       .pipe(
         map((user) => {
           this.user = user;
-          this.segmentChanged({ detail: { value: 'week' } });
+
           if (!!this.user.weightLogs) {
             this.latestWeight = user.weightLogs[user.weightLogs.length - 1];
           } else {
             this.latestWeight = { stones: 12, lbs: 7 } as WeightLog;
+          }
+          this.weightLogHistory = [];
+
+          if (this.user.weighFrequency == 1) {
+            //daily weigh ins
+            let currentDate = moment().startOf('day').add(-30, 'd');
+
+            while (currentDate <= moment().startOf('day')) {
+              const weightOnThisDay = this.user.weightLogs.find(
+                (e) =>
+                  moment(e.createDate).startOf('day').format() ===
+                  currentDate.format()
+              );
+              if (!!weightOnThisDay) {
+                this.weightLogHistory.push(weightOnThisDay);
+              } else {
+                this.weightLogHistory.push({
+                  createDate: currentDate.toDate(),
+                  stones: null,
+                  lbs: null,
+                });
+              }
+              currentDate = currentDate.add(1, 'd');
+            }
+
+            this.weightLogHistory.reverse();
+          } else if (this.user.weighFrequency == 2) {
+            const weighInDay = moment()
+              .day(moment().day() >= 2 ? 2 : -5)
+              .startOf('day');
+            //weekly weigh ins
+            let currentDate = moment(weighInDay).add(-6, 'week');
+
+            while (currentDate <= weighInDay) {
+              const weightThisWeek = this.user.weightLogs.find(
+                (e) =>
+                  moment(e.createDate)
+                    .day(moment(e.createDate).day() >= 2 ? 2 : -5)
+                    .startOf('day')
+                    .format() === currentDate.format()
+              );
+              if (!!weightThisWeek) {
+                this.weightLogHistory.push({
+                  createDate: currentDate.toDate(),
+                  stones: weightThisWeek.stones,
+                  lbs: weightThisWeek.lbs,
+                });
+              } else {
+                this.weightLogHistory.push({
+                  createDate: currentDate.toDate(),
+                  stones: null,
+                  lbs: null,
+                });
+              }
+              currentDate = currentDate.add(1, 'week');
+            }
+
+            this.weightLogHistory.reverse();
           }
         })
       )
@@ -50,6 +109,12 @@ export class WeightTrackerPage {
   }
   async openPicker(setTarget: boolean) {
     console.log(this.latestWeight);
+
+    let selectedWeight = this.latestWeight;
+
+    if (setTarget && !!this.user.targetWeight) {
+      selectedWeight = this.user.targetWeight;
+    }
     const stoneOptions = [];
     let i = 0;
     while (i < 100) {
@@ -66,7 +131,7 @@ export class WeightTrackerPage {
         text: `${x} lbs`,
         value: `${x}`,
       });
-      x++;
+      x = x + +0.5;
     }
     let pickerAction;
     const picker = await this.pickerController.create({
@@ -87,12 +152,12 @@ export class WeightTrackerPage {
       columns: [
         {
           name: 'stones',
-          selectedIndex: this.latestWeight.stones,
+          selectedIndex: selectedWeight.stones,
           options: stoneOptions,
         },
         {
           name: 'lbs',
-          selectedIndex: this.latestWeight.lbs,
+          selectedIndex: selectedWeight.lbs * 2,
           options: lbOptions,
         },
       ],

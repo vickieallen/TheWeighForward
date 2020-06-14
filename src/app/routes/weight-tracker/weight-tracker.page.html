@@ -67,9 +67,53 @@
       </ion-row>
     </ion-card-content>
   </ion-card>
-  <ion-card *ngIf="!!user?.weightLogs">
-    <ion-card-content>
-      <p *ngFor="let u of user.weightLogs">{{u.stones}} {{u.lbs}}</p>
-    </ion-card-content>
-  </ion-card>
+
+  <ion-row>
+    <ion-col size="4">
+      <ion-card class="ion-text-center ion-no-margin">
+        <h4>
+          13st <br />
+          2.5lbs
+        </h4>
+        <p>Start weight</p>
+      </ion-card>
+    </ion-col>
+    <ion-col size="4">
+      <ion-card class="ion-text-center ion-no-margin">
+        <h4>10st <br />2lbs</h4>
+        <p>Current weight</p>
+      </ion-card>
+    </ion-col>
+    <ion-col size="4">
+      <ion-card class="ion-text-center ion-no-margin">
+        <h4>1st <br />2lbs</h4>
+        <p>Until target</p>
+      </ion-card>
+    </ion-col>
+  </ion-row>
+  <ion-item
+    ><h3 *ngIf="user?.weighFrequency == 1">
+      Weight log history (last 30 days)
+    </h3>
+    <h3 *ngIf="user?.weighFrequency == 2">
+      Weight log history (last 6 weeks)
+    </h3></ion-item
+  >
+  <ion-list>
+    <ion-item *ngFor="let u of weightLogHistory">
+      <ion-label *ngIf="user?.weighFrequency == 2"
+        ><span>{{u.createDate | date: 'EEEE'}}</span> {{u.createDate | date :
+        'dd/MM/yyyy'}}
+      </ion-label>
+      <ion-label *ngIf="user?.weighFrequency == 1"
+        >{{u.createDate | date : 'dd/MM/yyyy'}}
+      </ion-label>
+      <ion-label *ngIf="!!u.stones">
+        <p>{{u.stones}}st {{u.lbs}}lbs</p></ion-label
+      >
+      <ion-label *ngIf="!!!u.stones"
+        ><p>Add weight log <i class="fa fa-plus"></i></p
+      ></ion-label>
+    </ion-item>
+  </ion-list>
 </ion-content>

@@ -1,14 +1,14 @@
-import { Component, OnInit } from "@angular/core";
-import { StorageService } from "../../services/storage.service";
-import { FormBuilder } from "@angular/forms";
-import { User } from "src/app/models/user";
-import { ToastController } from "@ionic/angular";
-import { UserService } from "src/app/services/user.service";
+import { Component, OnInit } from '@angular/core';
+import { StorageService } from '../../services/storage.service';
+import { FormBuilder } from '@angular/forms';
+import { User } from 'src/app/models/user';
+import { ToastController } from '@ionic/angular';
+import { UserService } from 'src/app/services/user.service';
 
 @Component({
-  selector: "app-settings",
-  templateUrl: "settings.page.html",
-  styleUrls: ["settings.page.scss"],
+  selector: 'app-settings',
+  templateUrl: 'settings.page.html',
+  styleUrls: ['settings.page.scss'],
 })
 export class SettingsPage {
   constructor(
@@ -19,9 +19,11 @@ export class SettingsPage {
   ) {}
 
   userSettingsForm = this.fb.group({
-    userName: [""],
-    synName: [""],
+    userName: [''],
+    synName: [''],
     numberOfSyns: [15],
+    weighFrequency: [1],
+    weighDay: [1],
   });
 
   currentUser: User;
@@ -33,6 +35,8 @@ export class SettingsPage {
       userName: this.currentUser.userName,
       synName: this.currentUser.synName,
       numberOfSyns: this.currentUser.numberOfSyns,
+      weighFrequency: this.currentUser.weighFrequency.toString(),
+      weighDay: this.currentUser.weighDay.toString(),
     });
   }
 
@@ -44,20 +48,21 @@ export class SettingsPage {
       userName: form.userName,
       numberOfSyns: form.numberOfSyns,
       synName: form.synName,
-      foodLogs: [],
+      weighFrequency: Number(form.weighFrequency),
+      weighDay: Number(form.weighDay),
     } as User;
     this.storageService
-      .setObject("user", user)
+      .setObject('user', user)
       .then(async (_) => {
         const toast = await this.toastController.create({
-          message: "Settings saved successfully",
+          message: 'Settings saved successfully',
           duration: 2000,
         });
         toast.present();
       })
       .catch(async (_) => {
         const toast = await this.toastController.create({
-          message: "There was an error saving your settings please try again",
+          message: 'There was an error saving your settings please try again',
         });
         toast.present();
       });

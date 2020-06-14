@@ -1,45 +1,61 @@
-
-
 <ion-header [translucent]="true">
   <ion-toolbar>
     <ion-row>
-    <ion-col size="10">
-      <ion-title class="ion-margin-vertical">
-        Settings
-      </ion-title>
-    </ion-col>
-    <ion-col size="2">
-      <div (click)="onSubmit()" class="ion-margin-vertical"><i class="fa fa-check"></i></div>
-    </ion-col>
+      <ion-col size="10">
+        <ion-title class="ion-margin-vertical">
+          Settings
+        </ion-title>
+      </ion-col>
+      <ion-col size="2">
+        <div (click)="onSubmit()" class="ion-margin-vertical">
+          <i class="fa fa-check"></i>
+        </div>
+      </ion-col>
     </ion-row>
-   
   </ion-toolbar>
 </ion-header>
 
 <ion-content [fullscreen]="true">
- 
   <ion-header collapse="condense">
     <ion-toolbar>
       <ion-title size="large">Settings</ion-title>
-     
     </ion-toolbar>
   </ion-header>
   <form [formGroup]="userSettingsForm" (ngSubmit)="onSubmit()">
-  <ion-item>
-    <ion-label position="floating">Name</ion-label>
-    <ion-input formControlName="userName"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="floating">Name for points</ion-label>
-    <ion-input formControlName="synName"></ion-input>
-  </ion-item>
-  <ion-item>
-    <ion-label position="floating">Daily number of {{userSettingsForm.get('synName').value}}</ion-label>
-    <ion-input type="number" formControlName="numberOfSyns"></ion-input>
-  </ion-item>
- 
-
-</form>
-
-  
+    <ion-item>
+      <ion-label position="floating">Name</ion-label>
+      <ion-input formControlName="userName"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating">Name for points</ion-label>
+      <ion-input formControlName="synName"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating"
+        >Daily number of {{userSettingsForm.get('synName').value}}</ion-label
+      >
+      <ion-input type="number" formControlName="numberOfSyns"></ion-input>
+    </ion-item>
+    <ion-item>
+      <ion-label position="floating"
+        >How often would you like to weigh in?</ion-label
+      >
+      <ion-select placeholder="Please select" formControlName="weighFrequency">
+        <ion-select-option value="1">Daily</ion-select-option>
+        <ion-select-option value="2">Weekly</ion-select-option>
+      </ion-select>
+    </ion-item>
+    <ion-item *ngIf="userSettingsForm.get('weighFrequency').value == 2">
+      <ion-label position="floating">What day do you weigh in?</ion-label>
+      <ion-select placeholder="Please select" formControlName="weighDay">
+        <ion-select-option value="1">Monday</ion-select-option>
+        <ion-select-option value="2">Tuesday</ion-select-option>
+        <ion-select-option value="3">Wednesday</ion-select-option>
+        <ion-select-option value="4">Thursday</ion-select-option>
+        <ion-select-option value="5">Friday</ion-select-option>
+        <ion-select-option value="6">Saturday</ion-select-option>
+        <ion-select-option value="0">Sunday</ion-select-option>
+      </ion-select>
+    </ion-item>
+  </form>
 </ion-content>
