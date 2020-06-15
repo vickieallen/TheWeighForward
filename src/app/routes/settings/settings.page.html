@@ -1,5 +1,5 @@
 <ion-header [translucent]="true">
-  <ion-toolbar>
+  <ion-toolbar color="secondary">
     <ion-row>
       <ion-col size="10">
         <ion-title class="ion-margin-vertical">
@@ -57,5 +57,16 @@
         <ion-select-option value="0">Sunday</ion-select-option>
       </ion-select>
     </ion-item>
+    <ion-item>
+      <ion-button color="danger" (click)="clearWeightLogs()"
+        >Clear weight logs</ion-button
+      >
+    </ion-item>
+    Icons made by
+    <a href="https://www.flaticon.com/authors/freepik" title="Freepik"
+      >Freepik</a
+    >
+    from
+    <a href="https://www.flaticon.com/" title="Flaticon"> www.flaticon.com</a>
   </form>
 </ion-content>

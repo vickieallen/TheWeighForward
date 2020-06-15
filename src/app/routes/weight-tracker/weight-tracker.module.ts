@@ -8,6 +8,7 @@ import { WeightTrackerPage } from './weight-tracker.page';
 import { WeightTrackerPageRoutingModule } from './weight-tracker-routing.module';
 import { WeightGraphComponent } from './weight-graph/weight-graph.component';
 import { ChartsModule } from 'ng2-charts';
+import { WeightAddedComponent } from './weight-added/weight-added.component';
 
 @NgModule({
   imports: [
@@ -17,6 +18,6 @@ import { ChartsModule } from 'ng2-charts';
     WeightTrackerPageRoutingModule,
     ChartsModule,
   ],
-  declarations: [WeightTrackerPage, WeightGraphComponent],
+  declarations: [WeightTrackerPage, WeightGraphComponent, WeightAddedComponent],
 })
 export class WeightTrackerPageModule {}

@@ -16,7 +16,7 @@ export class WeightGraphComponent implements OnChanges {
   public lineChartColors: Color[] = [
     {
       borderColor: 'black',
-      backgroundColor: 'rgba(255, 89, 89,0.3)',
+      backgroundColor: 'rgba(252, 104, 53,0.3)',
     },
   ];
   public lineChartLegend = false;

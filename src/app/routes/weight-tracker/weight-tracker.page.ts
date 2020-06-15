@@ -11,6 +11,7 @@ import { StorageService } from 'src/app/services/storage.service';
 import { User, WeighFrequency } from 'src/app/models/user';
 import { WeightLog } from 'src/app/models/weight-log';
 import * as moment from 'moment';
+import { WeightAddedComponent } from './weight-added/weight-added.component';
 
 @Component({
   selector: 'app-weight-tracker',
@@ -136,7 +137,7 @@ export class WeightTrackerPage {
   async openPicker(setTarget: boolean, date: Date = null) {
     console.log(this.latestWeight);
 
-    let selectedWeight = this.latestWeight;
+    let selectedWeight = this.latestWeight ?? { stones: 13, lbs: 1 };
 
     if (setTarget && !!this.user.targetWeight) {
       selectedWeight = this.user.targetWeight;
@@ -195,27 +196,63 @@ export class WeightTrackerPage {
         const lbs = await picker.getColumn('lbs');
 
         if (!setTarget) {
+          const weightLogDate = !!date ? date : moment().toDate();
           const weightLog = {
             stones: stones.options[stones.selectedIndex].value,
             lbs: lbs.options[lbs.selectedIndex].value,
-            createDate: !!date ? date : moment().toDate(),
+            createDate: weightLogDate,
           } as WeightLog;
           if (!!this.user && !!!this.user.weightLogs) {
             this.user.weightLogs = [];
           }
-          this.user.weightLogs.push(weightLog);
 
+          let todaysWeight = this.user.weightLogs.find(
+            (e) =>
+              moment(e.createDate).startOf('day') ===
+              moment(weightLogDate).startOf('day')
+          );
+          if (!!todaysWeight) {
+            todaysWeight = weightLog;
+          } else {
+            this.user.weightLogs.push(weightLog);
+          }
           this.storageService
             .setObject('user', this.user)
             .then(async (_) => {
-              const toast = await this.toastController.create({
-                message: 'Weight saved successfully',
-                duration: 2000,
-              });
-              toast.present();
-              this.storageService.getObject('user').then((u) => {
-                this.user = u;
-              });
+              if (!!date) {
+                const toast = await this.toastController.create({
+                  message: 'Weight saved successfully',
+                  duration: 2000,
+                });
+                toast.present();
+                this.storageService.getObject('user').then((u) => {
+                  this.user = u;
+                });
+              } else {
+                const index = this.user.weightLogs.indexOf(weightLog);
+                const previousIndex = index - 1;
+                const previousLog = this.user.weightLogs[previousIndex];
+
+                const modal = await this.modalController.create({
+                  component: WeightAddedComponent,
+                  componentProps: {
+                    weightLog: weightLog,
+                    previousWeightLog: previousLog,
+                  },
+                });
+
+                modal.onDidDismiss().then((_) => {
+                  from(this.storageService.getObject('user'))
+                    .pipe(
+                      map((user) => {
+                        this.user = user;
+                      })
+                    )
+                    .subscribe();
+                });
+                modal.present();
+              }
+
               this.getWeightLogHistory();
             })
             .catch(async (_) => {

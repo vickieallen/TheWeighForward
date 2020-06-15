@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { StorageService } from '../../services/storage.service';
 import { FormBuilder } from '@angular/forms';
 import { User } from 'src/app/models/user';
-import { ToastController } from '@ionic/angular';
+import { ToastController, AlertController } from '@ionic/angular';
 import { UserService } from 'src/app/services/user.service';
 
 @Component({
@@ -15,7 +15,8 @@ export class SettingsPage {
     private storageService: StorageService,
     private fb: FormBuilder,
     private toastController: ToastController,
-    private userService: UserService
+    private userService: UserService,
+    private alertController: AlertController
   ) {}
 
   userSettingsForm = this.fb.group({
@@ -66,5 +67,51 @@ export class SettingsPage {
         });
         toast.present();
       });
+  }
+  async presentAlertConfirm() {
+    const alert = await this.alertController.create({
+      cssClass: 'my-custom-class',
+      header: 'Confirm!',
+      message:
+        'Please confirm you want to remove your weight logs. This cannot be undone',
+      buttons: [
+        {
+          text: 'Cancel',
+          role: 'cancel',
+          cssClass: 'secondary',
+          handler: (blah) => {
+            console.log('Confirm Cancel: do nothing');
+          },
+        },
+        {
+          text: 'Confirm',
+          handler: () => {
+            const user = this.currentUser;
+            user.weightLogs = [];
+            this.storageService
+              .setObject('user', user)
+              .then(async (_) => {
+                const toast = await this.toastController.create({
+                  message: 'Weight logs removed',
+                  duration: 2000,
+                });
+                toast.present();
+              })
+              .catch(async (_) => {
+                const toast = await this.toastController.create({
+                  message:
+                    'There was an error removing your logs please try again',
+                });
+                toast.present();
+              });
+          },
+        },
+      ],
+    });
+
+    alert.present();
+  }
+  clearWeightLogs() {
+    this.presentAlertConfirm();
   }
 }
