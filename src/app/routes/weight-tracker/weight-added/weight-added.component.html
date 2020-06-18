@@ -3,12 +3,12 @@
     <ion-col size="10"> </ion-col>
     <ion-col size="2">
       <div (click)="dismiss()" class="ion-margin-vertical">
-        <i class="fa fa-times"></i>
+        <img width="25" src="../../../assets/icons/close.svg" />
       </div>
     </ion-col>
   </ion-row>
   <h2 class="ion-text-center">
-    {{ getHeadingText() }}
+    <strong> {{ getHeadingText() }}</strong>
   </h2>
   <div class="ion-text-center icon-container">
     <img
@@ -26,5 +26,6 @@
       class="ion-justify-content-center"
       src="../../../../assets/icons/sad.svg"
     />
+    <p>{{ lossSentence }}</p>
   </div>
 </ion-content>

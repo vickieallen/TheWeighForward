@@ -27,6 +27,9 @@ export class WeightTrackerPage {
   ) {}
   user: User;
   latestWeight: WeightLog;
+  startWeight: WeightLog;
+  untilTarget: WeightLog;
+  targetWeight: WeightLog;
   selectedSegment = 'week';
   weightLogHistory: WeightLog[];
   ionViewWillEnter() {
@@ -34,9 +37,38 @@ export class WeightTrackerPage {
       .pipe(
         map((user) => {
           this.user = user;
-
+          this.targetWeight = this.user.targetWeight;
           if (!!this.user.weightLogs) {
+            this.user.weightLogs.sort((val1, val2) => {
+              return new Date(val1.createDate) > new Date(val2.createDate)
+                ? 1
+                : -1;
+            });
+
             this.latestWeight = user.weightLogs[user.weightLogs.length - 1];
+
+            this.startWeight = user.weightLogs[0];
+
+            if (!!this.user.targetWeight) {
+              const latestWeightInLbs =
+                this.latestWeight.stones * 14 + +this.latestWeight.lbs;
+              const targetWeightInLbs =
+                this.targetWeight.stones * 14 + +this.targetWeight.lbs;
+              const dif = latestWeightInLbs - targetWeightInLbs;
+              let stones = 0;
+              let lbs = dif;
+              if (dif >= 14) {
+                const s = dif / 14;
+                stones = Math.floor(s);
+                lbs = dif - stones * 14;
+              } else {
+                lbs = dif;
+              }
+              this.untilTarget = {
+                stones: stones,
+                lbs: lbs,
+              } as WeightLog;
+            }
           } else {
             this.latestWeight = { stones: 12, lbs: 7 } as WeightLog;
           }

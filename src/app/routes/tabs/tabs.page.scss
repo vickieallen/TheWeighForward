@@ -1,1 +1,5 @@
-
+.grayscale {
+  img {
+    filter: grayscale(80%);
+  }
+}

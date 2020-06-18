@@ -15,8 +15,11 @@ export class WeightGraphComponent implements OnChanges {
   public lineChartOptions: any;
   public lineChartColors: Color[] = [
     {
-      borderColor: 'black',
-      backgroundColor: 'rgba(252, 104, 53,0.3)',
+      borderColor: '#71E2C5',
+      pointBorderColor: '#71E2C5',
+      pointBackgroundColor: '#71E2C5',
+
+      backgroundColor: 'rgba(46, 221, 218,0.3)',
     },
   ];
   public lineChartLegend = false;
@@ -99,12 +102,23 @@ export class WeightGraphComponent implements OnChanges {
     this.lineChartOptions = {
       responsive: true,
       spanGaps: true,
+      defaultFontFamily: 'Montserrat',
       scales: {
+        xAxes: [
+          {
+            gridLines: {
+              display: false,
+            },
+          },
+        ],
         yAxes: [
           {
+            gridLines: {
+              display: false,
+            },
             ticks: {
               min: targetWeightInLbs > 0 ? targetWeightInLbs : minWeightInLbs,
-              max: maxWeightInLbs,
+              max: maxWeightInLbs + 1,
               stepSize: 7,
               suggestedMin: 0.5,
               suggestedMax: 5.5,

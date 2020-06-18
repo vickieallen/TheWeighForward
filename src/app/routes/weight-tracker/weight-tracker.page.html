@@ -1,5 +1,5 @@
 <ion-header [translucent]="true">
-  <ion-toolbar color="secondary">
+  <ion-toolbar>
     <ion-row>
       <ion-col size="10">
         <ion-title class="ion-margin-vertical">
@@ -8,7 +8,7 @@
       </ion-col>
       <ion-col size="2">
         <div (click)="openPicker(false)" class="ion-margin-vertical">
-          <i class="fa fa-plus"></i>
+          <img width="25" src="../../../assets/icons/plus.svg" />
         </div>
       </ion-col>
     </ion-row>
@@ -47,21 +47,24 @@
     [period]="selectedSegment"
   ></app-weight-graph>
 
-  <ion-card color="primary">
+  <ion-card>
     <ion-card-content (click)="editTargetWeight()">
       <ion-row>
-        <ion-col size="2" color="secondary">
-          <i class="fa fa-lg fa-star secondary"></i>
+        <ion-col size="3" color="secondary">
+          <img height="60" src="../../../assets/icons/goals.svg" />
         </ion-col>
-        <ion-col size="10"
+        <ion-col size="9"
           ><div *ngIf="!!user?.targetWeight">
-            <p>
-              Your target weight: {{user?.targetWeight?.stones}}st
-              {{user?.targetWeight?.lbs}}lbs
+            <p id="target-text">
+              Your target weight:
             </p>
+            <h1>
+              {{user?.targetWeight?.stones}}st {{user?.targetWeight?.lbs}}lbs
+            </h1>
           </div>
           <p *ngIf="!!!user?.targetWeight">
             Add target weight
+            <img width="25" src="../../../assets/icons/plus.svg" />
           </p>
         </ion-col>
       </ion-row>
@@ -71,23 +74,38 @@
   <ion-row>
     <ion-col size="4">
       <ion-card class="ion-text-center ion-no-margin">
-        <h4>
-          13st <br />
-          2.5lbs
-        </h4>
-        <p>Start weight</p>
+        <ion-card-content
+          ><img class="ion-padding" src="../../../assets/icons/spaceship.svg" />
+          <h4 *ngIf="!!startWeight">
+            {{startWeight.stones}}st <br />
+            {{startWeight.lbs}}lbs
+          </h4>
+          <p>Start weight</p>
+        </ion-card-content>
       </ion-card>
     </ion-col>
     <ion-col size="4">
       <ion-card class="ion-text-center ion-no-margin">
-        <h4>10st <br />2lbs</h4>
-        <p>Current weight</p>
+        <ion-card-content
+          ><img class="ion-padding" src="../../../assets/icons/start.svg" />
+          <h4 *ngIf="!!latestWeight">
+            {{latestWeight.stones}}st <br />
+            {{latestWeight.lbs}}lbs
+          </h4>
+          <p>Weight now</p></ion-card-content
+        >
       </ion-card>
     </ion-col>
     <ion-col size="4">
       <ion-card class="ion-text-center ion-no-margin">
-        <h4>1st <br />2lbs</h4>
-        <p>Until target</p>
+        <ion-card-content>
+          <img class="ion-padding" src="../../../assets/icons/finish.svg" />
+          <h4 *ngIf="!!untilTarget">
+            {{untilTarget.stones}}st <br />
+            {{untilTarget.lbs}}lbs
+          </h4>
+          <p>Until target</p>
+        </ion-card-content>
       </ion-card>
     </ion-col>
   </ion-row>
@@ -112,9 +130,18 @@
         <p>{{u.stones}}st {{u.lbs}}lbs</p></ion-label
       >
       <ion-label *ngIf="!!u.stones"> <p>{{getWeightChange(u)}}</p></ion-label>
-      <ion-label *ngIf="!!!u.stones" (click)="openPicker(false, u.createDate)"
-        ><p>Add weight log <i class="fa fa-plus"></i></p
-      ></ion-label>
+      <ion-label *ngIf="!!!u.stones" (click)="openPicker(false, u.createDate)">
+        <ion-row
+          ><ion-col size="10"
+            ><p class="ion-text-right">Add weight log</p></ion-col
+          >
+          <ion-col size="2"
+            ><span>
+              <img
+                width="20"
+                src="../../../assets/icons/plus.svg" /></span></ion-col
+        ></ion-row>
+      </ion-label>
     </ion-item>
   </ion-list>
 </ion-content>
