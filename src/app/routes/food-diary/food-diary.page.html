@@ -21,19 +21,26 @@
       <ion-title size="large">Tab 1</ion-title>
     </ion-toolbar>
   </ion-header>
-  <div *ngIf="!!user">
-    <p>{{user.userName}}</p>
-    <p>Today's {{user.synName}} - {{user.numberOfSyns}}</p>
+  <div class="ion-margin-top" *ngIf="!!user">
+    <ion-row class="ion-margin"
+      ><ion-col size="1" (click)="goBackward()">
+        <i class="fa fa-chevron-left"></i>
+      </ion-col>
+      <ion-col size="10"
+        ><div class="ion-text-center">
+          <span>{{ getDate() }} </span>
+        </div></ion-col
+      >
+      <ion-col size="1" (click)="goForward()" class="ion-text-right">
+        <i class="fa fa-chevron-right"></i>
+      </ion-col>
+    </ion-row>
     <app-daily-usage-graph
-      [usedDailyPoints]="'6'"
+      [usedDailyPoints]="usedSyns"
       [totalDailyPoints]="user.numberOfSyns"
       [pointName]="user.synName"
     ></app-daily-usage-graph>
 
-    <ion-card>
-      <ion-card-content>
-        <p *ngFor="let u of user.foodLogs">{{u.description}}</p>
-      </ion-card-content>
-    </ion-card>
+    <!-- <app-daily-log [foodLog]="currentLog"></app-daily-log> -->
   </div>
 </ion-content>

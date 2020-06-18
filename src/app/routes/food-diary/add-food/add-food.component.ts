@@ -47,15 +47,15 @@ export class AddFoodComponent implements OnInit {
   onSubmit() {
     const form = this.foodLogForm.value;
     console.log(form);
-    const foodLog = {
-      description: form.description,
-      numberOfSyns: form.numberOfSyns,
-      createDate: moment().toDate(),
-    } as FoodLog;
+    // const foodLog = {
+    //   description: form.description,
+    //   numberOfSyns: form.numberOfSyns,
+    //   createDate: moment().toDate(),
+    // } as FoodLog;
     if (!!this.currentUser && !!!this.currentUser.foodLogs) {
       this.currentUser.foodLogs = [];
     }
-    this.currentUser.foodLogs.push(foodLog);
+    //this.currentUser.foodLogs.push(foodLog);
     this.storageService
       .setObject('user', this.currentUser)
       .then(async (_) => {

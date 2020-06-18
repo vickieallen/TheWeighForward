@@ -8,6 +8,7 @@ import { FoodDiaryPageRoutingModule } from './food-diary-routing.module';
 import { AddFoodComponent } from './add-food/add-food.component';
 import { DailyUsageGraphComponent } from './daily-usage-graph/daily-usage-graph.component';
 import { ChartsModule } from 'ng2-charts';
+import { DailyLogComponent } from './daily-log/daily-log.component';
 
 @NgModule({
   imports: [
@@ -18,6 +19,11 @@ import { ChartsModule } from 'ng2-charts';
     ReactiveFormsModule,
     ChartsModule,
   ],
-  declarations: [FoodDiaryPage, AddFoodComponent, DailyUsageGraphComponent],
+  declarations: [
+    FoodDiaryPage,
+    AddFoodComponent,
+    DailyUsageGraphComponent,
+    DailyLogComponent,
+  ],
 })
 export class FoodDiaryPageModule {}
